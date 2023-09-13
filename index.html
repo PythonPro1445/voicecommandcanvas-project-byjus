@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <title>Voice Command Canvas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+
+  </head>
+
+  <body background="background.jpg">
+    <h1 style="font-family: monospace;">Voice Controlled Canvas</h1>
+    <span id="status"></span> 
+    <button onclick="start();" class="btn btn-success">Draw</button>
+    <br><br>
+  </body>
+  <style>
+    body{
+        text-align: center;        
+    }
+    span{
+        font-size: 18px;
+        color: red;
+    }
+    canvas{
+        background: white;
+        border: 1px solid black;
+        border-radius: 20px;
+    }
+  </style>
+  <script>
+    var x = 0;
+    var y = 0;
+    draw_circle = "";
+    draw_rect = "";
+
+    function setup() {
+            canvas = createCanvas(1200,800);
+        }   
+
+    var SpeechRecognition = window.webkitSpeechRecognition;
+
+    var recognition = new SpeechRecognition();
+
+    function start()
+    {
+        document.getElementById("status").innerHTML = "System is Ready, Please Start The Prompting."
+        recognition.start();
+    }
+
+    recognition.onresult = function(event) {
+        console.log(event);
+        var content = event.results[0][0].transcript;
+        document.getElementById("status").innerHTML = "The Speech has been Recognized As a  " + content;
+        if(content == "Circle")
+        {
+
+            x = Math.floor(Math.random() * 1200);
+            y = Math.floor(Math.random() * 800);
+            document.getElementById("status").innerHTML = "The System has started drawing your circle!";
+            draw_circle = "set";
+            draw();
+        }
+        if(content == "rectangle")
+        {
+            x = Math.floor(Math.random() * 1200);
+            y = Math.floor(Math.random() * 800);
+            document.getElementById("status").innerHTML = "The System has started drawing your rectangle!";
+            draw_rect = "set";
+            draw();
+        }
+
+
+
+        function draw(){
+            console.log(draw_circle)
+            if(draw_circle == "set")
+            {
+                radius = Math.floor(Math.random() * 100);
+                circle(x,y,radius)
+                document.getElementById("status").innerHTML = "The system has drawn the circle";
+                draw_circle = "";
+            }
+            if(draw_rect == "set")
+            {
+                rect(x,y,100,200)
+                document.getElementById("status").innerHTML = "The system has drawn the rectangle";
+                draw_rect = "";
+            }
+        }
+    }
+  </script>
+</html>
